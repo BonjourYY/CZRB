@@ -6,8 +6,11 @@ import path from "path";
 export default defineConfig({
   plugins: [vue()],
   resolve: {
+    // 设置别名
     alias: {
-      "@": path.resolve(__dirname, "./src/components"),
+      "@components": path.resolve(__dirname, "./src/components"),
+      "@route": path.resolve(__dirname, "./src/route"),
+      "@image": path.resolve(__dirname, "./src/image"),
     },
   },
 });
