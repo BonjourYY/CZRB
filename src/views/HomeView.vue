@@ -3,17 +3,16 @@
     <!-- 侧边栏 -->
     <el-aside width="200px">
       <el-scrollbar>
-
         <el-menu>
           <router-link :to="{ name: 'home' }">
-            <el-menu-item index="1"><el-icon>
-                <Menu />
-              </el-icon>首页</el-menu-item>
+            <el-menu-item index="1"
+              ><el-icon> <Menu /> </el-icon>首页</el-menu-item
+            >
           </router-link>
           <router-link :to="{ name: 'addProject' }">
-            <el-menu-item index="2"><el-icon>
-                <FolderAdd />
-              </el-icon>添加项目</el-menu-item>
+            <el-menu-item index="2"
+              ><el-icon> <FolderAdd /> </el-icon>添加项目</el-menu-item
+            >
           </router-link>
         </el-menu>
       </el-scrollbar>
@@ -48,7 +47,6 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
 import { Menu, FolderAdd } from '@element-plus/icons-vue'
 </script>
 
@@ -73,7 +71,7 @@ import { Menu, FolderAdd } from '@element-plus/icons-vue'
 }
 
 .layout-container .el-main {
-  padding: 0;
+  padding: 20px;
 }
 
 .layout-container .toolbar {

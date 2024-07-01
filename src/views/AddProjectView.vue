@@ -1,9 +1,5 @@
 <template>
-  <el-form
-    :model="projectVO"
-    style="max-width: 600px; margin:30px auto;"
-    label-width="auto"
-    label-position="right">
+  <el-form :model="projectVO" label-position="top">
     <el-form-item label="项目名称">
       <el-input v-model="projectVO.name" clearable />
     </el-form-item>
@@ -14,51 +10,9 @@
 
     <el-form-item label="是否申报软著">
       <el-radio-group v-model="projectVO.hasCopyrights">
-        <el-radio value="true">是</el-radio>
-        <el-radio value="false">否</el-radio>
+        <el-radio :value="true">是</el-radio>
+        <el-radio :value="false">否</el-radio>
       </el-radio-group>
-    </el-form-item>
-
-    <el-form-item label="项目类型">
-      <el-select v-model="projectVO.category">
-        <el-option
-          v-for="({ label, value }, index) in projectCategory"
-          :key="index"
-          :label="label"
-          :value="value" />
-      </el-select>
-    </el-form-item>
-
-    <el-form-item label="业务联系人">
-      <el-input v-model="projectVO.business" clearable />
-    </el-form-item>
-
-    <el-form-item label="技术联系人">
-      <el-input v-model="projectVO.developer" clearable />
-    </el-form-item>
-
-    <el-form-item label="立项时间">
-      <el-date-picker v-model="projectVO.startDay" type="date" />
-    </el-form-item>
-
-    <el-form-item label="预计结束时间">
-      <el-date-picker v-model="projectVO.expectEndDay" type="date" />
-    </el-form-item>
-
-    <el-form-item label="实际结束时间">
-      <el-date-picker v-model="projectVO.endDay" type="date" />
-    </el-form-item>
-
-    <el-form-item label="前台地址">
-      <el-input v-model="projectVO.urlFront" clearable />
-    </el-form-item>
-
-    <el-form-item label="管理地址">
-      <el-input v-model="projectVO.urlAdmin" clearable />
-    </el-form-item>
-
-    <el-form-item label="其他人员">
-      <el-input v-model="projectVO.others" clearable />
     </el-form-item>
 
     <el-form-item label="软著材料">
@@ -76,12 +30,76 @@
       </el-upload>
     </el-form-item>
 
+    <el-form-item label="立项时间">
+      <el-date-picker
+        v-model="projectVO.startDay"
+        type="date"
+        :shortcuts="[{ text: '今天', value: new Date() }]" />
+    </el-form-item>
+
+    <el-form-item label="预计结束时间">
+      <el-date-picker v-model="projectVO.expectEndDay" type="date" />
+    </el-form-item>
+
+    <el-form-item label="实际结束时间">
+      <el-date-picker v-model="projectVO.endDay" type="date" />
+    </el-form-item>
+
+    <el-form-item label="项目类型">
+      <el-select v-model="projectVO.category">
+        <el-option
+          v-for="({ label, value }, index) in projectCategory"
+          :key="index"
+          :label="label"
+          :value="value" />
+      </el-select>
+    </el-form-item>
+
+    <el-form-item label="业务联系人">
+      <el-select
+        multiple
+        clearable
+        filterable
+        allow-create
+        v-model="projectVO.business">
+        <el-option
+          v-for="({ label, value }, index) in businessList"
+          :key="index"
+          :label="label"
+          :value="value" />
+      </el-select>
+    </el-form-item>
+
+    <el-form-item label="技术联系人">
+      <el-input v-model="projectVO.developer" clearable />
+    </el-form-item>
+
+    <el-form-item label="前台地址">
+      <el-input v-model="projectVO.urlFront" clearable>
+        <template #prepend
+          ><el-icon> <Link /> </el-icon
+        ></template>
+      </el-input>
+    </el-form-item>
+
+    <el-form-item label="管理地址">
+      <el-input v-model="projectVO.urlAdmin" clearable>
+        <template #prepend
+          ><el-icon> <Link /> </el-icon
+        ></template>
+      </el-input>
+    </el-form-item>
+
+    <el-form-item label="其他人员">
+      <el-input v-model="projectVO.others" clearable />
+    </el-form-item>
+
     <el-form-item label="项目备注">
       <el-input
         v-model="projectVO.remark"
         :rows="2"
         type="textarea"
-        placeholder="Please input" />
+        placeholder="请输入项目备注" />
     </el-form-item>
 
     <el-form-item label="设计">
@@ -95,7 +113,7 @@
         type="daterange"
         start-placeholder="开始日期"
         end-placeholder="结束日期"
-        @change="dateRangeChangeHandler(designDateRange,'designer')" />
+        @change="dateRangeChangeHandler(designDateRange, 'designer')" />
     </el-form-item>
 
     <el-form-item label="前端">
@@ -110,7 +128,7 @@
         range-separator="-"
         start-placeholder="开始日期"
         end-placeholder="结束日期"
-        @change="dateRangeChangeHandler(frontendDateRange,'frontDev')" />
+        @change="dateRangeChangeHandler(frontendDateRange, 'frontDev')" />
     </el-form-item>
 
     <el-form-item label="后端">
@@ -125,7 +143,7 @@
         range-separator="-"
         start-placeholder="开始日期"
         end-placeholder="结束日期"
-        @change="dateRangeChangeHandler(backendDateRange,'backDev')" />
+        @change="dateRangeChangeHandler(backendDateRange, 'backDev')" />
     </el-form-item>
 
     <el-form-item>
@@ -136,9 +154,8 @@
 </template>
 
 <script setup>
-import { reactive,ref } from 'vue'
-import { UploadFilled } from '@element-plus/icons-vue'
-import { ElMessageBox, ElMessage } from 'element-plus'
+import { reactive, ref } from 'vue'
+import { UploadFilled, Link } from '@element-plus/icons-vue'
 
 // 项目分类
 const projectCategory = [
@@ -148,15 +165,29 @@ const projectCategory = [
   { value: 'APP', label: 'APP' }
 ]
 
+// 业务联系人
+const businessList = [
+  { value: '张三', label: '张三' },
+  { value: '李四', label: '李四' },
+  { value: '王五', label: '王五' }
+]
+
+// 技术联系人
+const developerList = [
+  { value: '张三', label: '张三' },
+  { value: '李四', label: '李四' },
+  { value: '王五', label: '王五' }
+]
+
 const designDateRange = ref([]);
 const frontendDateRange = ref([]);
 const backendDateRange = ref([]);
 
 // 日期范围选择时，触发的回调
-const dateRangeChangeHandler = (dateRange,item)=>{
+const dateRangeChangeHandler = (dateRange, item) => {
   console.log(item)
- projectVO[`${item}Start`] =  dateRange[0]
- projectVO[`${item}End`] =  dateRange[1]
+  projectVO[`${item}Start`] = dateRange[0]
+  projectVO[`${item}End`] = dateRange[1]
 }
 
 const projectVO = reactive({
@@ -164,7 +195,7 @@ const projectVO = reactive({
   backDevEnd: "",
   backDevStart: "",
   business: "",
-  category: "",
+  category: projectCategory[0].value,
   designer: "",
   designerEnd: "",
   designerStart: "",
@@ -175,7 +206,7 @@ const projectVO = reactive({
   frontDev: "",
   frontDevEnd: "",
   frontDevStart: "",
-  hasCopyrights: "",
+  hasCopyrights: false,
   id: 0,
   name: "",
   others: "",
@@ -192,4 +223,18 @@ const submitHandler = () => {
 }
 </script>
 
-<style lang="scss"></style>
+<style lang="scss">
+.el-form {
+  padding: 40px;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  column-gap: 100px;
+
+  .el-form-item {
+    .el-form-item__label {
+      padding: 0;
+      display: inline-block;
+    }
+  }
+}
+</style>
