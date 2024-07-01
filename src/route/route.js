@@ -3,19 +3,14 @@ const routes = [
   // 首页
   {
     path: "/",
-    component: () => import("@components/HomeView.vue"),
+    name: "home",
+    component: () => import("@views/HomeView.vue"),
     children: [
-      // 新建稿件
+      // 添加项目
       {
-        path: "add",
-        name: "add",
-        component: () => import("@components/AddArticleView.vue"),
-      },
-      // 稿源中心
-      {
-        path: "articles",
-        name: "articles",
-        component: () => import("@components/ArticlesView.vue"),
+        path: "project",
+        name: "addProject",
+        component: () => import("@views/AddProjectView.vue"),
       },
     ],
   },

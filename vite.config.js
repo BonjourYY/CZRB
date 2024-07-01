@@ -9,6 +9,7 @@ export default defineConfig({
     // 设置别名
     alias: {
       "@components": path.resolve(__dirname, "./src/components"),
+      "@views": path.resolve(__dirname, "./src/views"),
       "@route": path.resolve(__dirname, "./src/route"),
       "@image": path.resolve(__dirname, "./src/image"),
     },
